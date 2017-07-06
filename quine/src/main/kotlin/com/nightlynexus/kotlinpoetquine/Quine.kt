@@ -1,8 +1,6 @@
 package com.nightlynexus.kotlinpoetquine
 
 import com.squareup.kotlinpoet.ARRAY
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.ClassName.Companion.asClassName
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.KModifier.CONST
@@ -10,6 +8,7 @@ import com.squareup.kotlinpoet.KModifier.PRIVATE
 import com.squareup.kotlinpoet.KotlinFile
 import com.squareup.kotlinpoet.ParameterizedTypeName
 import com.squareup.kotlinpoet.PropertySpec
+import com.squareup.kotlinpoet.asClassName
 import kotlin.Array
 import kotlin.String
 
@@ -26,7 +25,7 @@ fun main(args: Array<String>) {
   |val body = %S
   |%T.builder(PACKAGE_NAME, FILE_NAME)
   |    .addStaticImport("com.squareup.kotlinpoet", "ARRAY")
-  |    .addStaticImport(%T::class, "asClassName")
+  |    .addStaticImport("com.squareup.kotlinpoet", "asClassName")
   |    .addStaticImport(%T::class, "CONST")
   |    .addStaticImport(KModifier::class, "PRIVATE")
   |    .addProperty(%T.builder("PACKAGE_NAME", String::class, PRIVATE, CONST)
@@ -35,15 +34,14 @@ fun main(args: Array<String>) {
   |        .initializer(string, FILE_NAME).build())
   |    .addFun(%T.builder("main").addParameter(
   |        "args", %T.get(ARRAY, String::class.asClassName()))
-  |        .addCode(body, string, body,
-  |            KotlinFile::class, ClassName.Companion::class, KModifier::class, PropertySpec::class,
+  |        .addCode(body, string, body, KotlinFile::class, KModifier::class, PropertySpec::class,
   |            FunSpec::class, ParameterizedTypeName::class)
   |        .build())
   |    .build().writeTo(System.out)
   |""".trimMargin()
   KotlinFile.builder(PACKAGE_NAME, FILE_NAME)
       .addStaticImport("com.squareup.kotlinpoet", "ARRAY")
-      .addStaticImport(ClassName.Companion::class, "asClassName")
+      .addStaticImport("com.squareup.kotlinpoet", "asClassName")
       .addStaticImport(KModifier::class, "CONST")
       .addStaticImport(KModifier::class, "PRIVATE")
       .addProperty(PropertySpec.builder("PACKAGE_NAME", String::class, PRIVATE, CONST)
@@ -52,8 +50,7 @@ fun main(args: Array<String>) {
           .initializer(string, FILE_NAME).build())
       .addFun(FunSpec.builder("main").addParameter(
           "args", ParameterizedTypeName.get(ARRAY, String::class.asClassName()))
-          .addCode(body, string, body,
-              KotlinFile::class, ClassName.Companion::class, KModifier::class, PropertySpec::class,
+          .addCode(body, string, body, KotlinFile::class, KModifier::class, PropertySpec::class,
               FunSpec::class, ParameterizedTypeName::class)
           .build())
       .build().writeTo(System.out)
