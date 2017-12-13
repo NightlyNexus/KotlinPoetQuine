@@ -17,10 +17,8 @@ private const val PACKAGE_NAME: String = "com.nightlynexus.kotlinpoetquine"
 private const val FILE_NAME: String = "Quine"
 
 fun main(args: Array<String>) {
-
   val string = "%S"
   val body = """
-  |
   |val string = %S
   |val body = %S
   |%T.builder(PACKAGE_NAME, FILE_NAME)
