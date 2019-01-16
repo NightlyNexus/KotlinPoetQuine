@@ -5,3 +5,6 @@ jdk:
 
 script:
   - bash test.sh
+
+notifications:
+  email: false
