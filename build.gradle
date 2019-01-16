@@ -3,7 +3,7 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.21'
+    classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.11'
   }
 }
 
@@ -13,12 +13,6 @@ allprojects {
   }
 
   apply plugin: 'kotlin'
-  apply plugin: 'checkstyle'
-
-  checkstyle {
-    configFile rootProject.file('checkstyle.xml')
-    toolVersion = '7.7'
-  }
 
   tasks.withType(JavaCompile) {
     options.compilerArgs += ['-Xlint:all', '-Werror']
