@@ -1,4 +1,7 @@
-language: bash
+language: java
+
+jdk:
+  - oraclejdk8
 
 script:
   - bash test.sh
