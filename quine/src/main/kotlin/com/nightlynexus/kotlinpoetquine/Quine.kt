@@ -17,24 +17,24 @@ private const val PACKAGE_NAME: String = "com.nightlynexus.kotlinpoetquine"
 private const val FILE_NAME: String = "Quine"
 
 fun main(args: Array<String>) {
-    val string = "%S"
+    val string = "%1S"
     val body = """
-    |val string = %S
-    |val body = %S
-    |%T.builder(PACKAGE_NAME, FILE_NAME)
+    |val string = %1S
+    |val body = %2S
+    |%3T.builder(PACKAGE_NAME, FILE_NAME)
     |    .addImport("com.squareup.kotlinpoet", "ARRAY")
     |    .addImport("com.squareup.kotlinpoet", "asClassName")
     |    .addImport("com.squareup.kotlinpoet", "ParameterizedTypeName.Companion.plusParameter")
-    |    .addImport(%T::class, "CONST")
-    |    .addImport(KModifier::class, "PRIVATE")
-    |    .addProperty(%T.builder("PACKAGE_NAME", String::class, PRIVATE, CONST)
+    |    .addImport(%4T::class, "CONST")
+    |    .addImport(%4T::class, "PRIVATE")
+    |    .addProperty(%5T.builder("PACKAGE_NAME", %6T::class, PRIVATE, CONST)
     |        .initializer(string, PACKAGE_NAME).build())
-    |    .addProperty(PropertySpec.builder("FILE_NAME", String::class, PRIVATE, CONST)
+    |    .addProperty(PropertySpec.builder("FILE_NAME", %6T::class, PRIVATE, CONST)
     |        .initializer(string, FILE_NAME).build())
-    |    .addFunction(%T.builder("main").addParameter(
-    |        "args", ARRAY.plusParameter(String::class.asClassName()))
-    |        .addCode(body, string, body, FileSpec::class, KModifier::class, PropertySpec::class,
-    |            FunSpec::class)
+    |    .addFunction(%7T.builder("main").addParameter(
+    |        "args", ARRAY.plusParameter(%6T::class.asClassName()))
+    |        .addCode(body, string, body, %3T::class, %4T::class, %5T::class,
+    |            %6T::class, %7T::class)
     |        .build())
     |    .build().writeTo(System.out)
     |""".trimMargin()
@@ -51,7 +51,7 @@ fun main(args: Array<String>) {
         .addFunction(FunSpec.builder("main").addParameter(
             "args", ARRAY.plusParameter(String::class.asClassName()))
             .addCode(body, string, body, FileSpec::class, KModifier::class, PropertySpec::class,
-                FunSpec::class)
+                String::class, FunSpec::class)
             .build())
         .build().writeTo(System.out)
 }
