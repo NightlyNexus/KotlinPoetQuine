@@ -6,6 +6,8 @@ import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.KModifier.CONST
 import com.squareup.kotlinpoet.KModifier.PRIVATE
+import com.squareup.kotlinpoet.MemberName
+import com.squareup.kotlinpoet.ParameterizedTypeName
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.plusParameter
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.asClassName
@@ -22,36 +24,56 @@ fun main(args: Array<String>) {
     |val string = %1S
     |val body = %2S
     |%3T.builder(PACKAGE_NAME, FILE_NAME)
-    |    .addImport("com.squareup.kotlinpoet", "ARRAY")
-    |    .addImport("com.squareup.kotlinpoet", "asClassName")
-    |    .addImport("com.squareup.kotlinpoet", "ParameterizedTypeName.Companion.plusParameter")
-    |    .addImport(%4T::class, "CONST")
-    |    .addImport(%4T::class, "PRIVATE")
-    |    .addProperty(%5T.builder("PACKAGE_NAME", %6T::class, PRIVATE, CONST)
+    |    .addProperty(%4T.builder("PACKAGE_NAME", %5T::class, %6M, %7M)
     |        .initializer(string, PACKAGE_NAME).build())
-    |    .addProperty(PropertySpec.builder("FILE_NAME", %6T::class, PRIVATE, CONST)
+    |    .addProperty(PropertySpec.builder("FILE_NAME", %5T::class, PRIVATE, CONST)
     |        .initializer(string, FILE_NAME).build())
-    |    .addFunction(%7T.builder("main").addParameter(
-    |        "args", ARRAY.plusParameter(%6T::class.asClassName()))
-    |        .addCode(body, string, body, %3T::class, %4T::class, %5T::class,
-    |            %6T::class, %7T::class)
+    |    .addFunction(%8T.builder("main").addParameter(
+    |        "args", %9M.%10M(%5T::class.%11M()))
+    |        .addCode(
+    |            body,
+    |            string,
+    |            body,
+    |            %3T::class,
+    |            %4T::class,
+    |            %5T::class,
+    |            %12T(%13T::class.%11M(), "PRIVATE"),
+    |            %12T(%13T::class.%11M(), "CONST"),
+    |            %8T::class,
+    |            %12T("com.squareup.kotlinpoet", "ARRAY"),
+    |            %12T(%14T::class.%11M(), "plusParameter"),
+    |            %12T("com.squareup.kotlinpoet", "asClassName"),
+    |            %12T::class,
+    |            %13T::class,
+    |            %14T::class
+    |        )
     |        .build())
     |    .build().writeTo(System.out)
     |""".trimMargin()
     FileSpec.builder(PACKAGE_NAME, FILE_NAME)
-        .addImport("com.squareup.kotlinpoet", "ARRAY")
-        .addImport("com.squareup.kotlinpoet", "asClassName")
-        .addImport("com.squareup.kotlinpoet", "ParameterizedTypeName.Companion.plusParameter")
-        .addImport(KModifier::class, "CONST")
-        .addImport(KModifier::class, "PRIVATE")
         .addProperty(PropertySpec.builder("PACKAGE_NAME", String::class, PRIVATE, CONST)
             .initializer(string, PACKAGE_NAME).build())
         .addProperty(PropertySpec.builder("FILE_NAME", String::class, PRIVATE, CONST)
             .initializer(string, FILE_NAME).build())
         .addFunction(FunSpec.builder("main").addParameter(
             "args", ARRAY.plusParameter(String::class.asClassName()))
-            .addCode(body, string, body, FileSpec::class, KModifier::class, PropertySpec::class,
-                String::class, FunSpec::class)
+            .addCode(
+                body,
+                string,
+                body,
+                FileSpec::class,
+                PropertySpec::class,
+                String::class,
+                MemberName(KModifier::class.asClassName(), "PRIVATE"),
+                MemberName(KModifier::class.asClassName(), "CONST"),
+                FunSpec::class,
+                MemberName("com.squareup.kotlinpoet", "ARRAY"),
+                MemberName(ParameterizedTypeName.Companion::class.asClassName(), "plusParameter"),
+                MemberName("com.squareup.kotlinpoet", "asClassName"),
+                MemberName::class,
+                KModifier::class,
+                ParameterizedTypeName.Companion::class
+            )
             .build())
         .build().writeTo(System.out)
 }
